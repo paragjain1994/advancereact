@@ -9,11 +9,12 @@ const Login = (props) => {
   const [emailIsValid, setEmailIsValid] = useState();
   const [enteredPassword, setEnteredPassword] = useState('');
   const [passwordIsValid, setPasswordIsValid] = useState();
+  const [enteredClg, setEnteredClg]= useState('');
   const [formIsValid, setFormIsValid] = useState(false);
 
   useEffect(()=>{
     setFormIsValid(
-      enteredEmail.includes('@') && enteredPassword.trim().length > 6
+      enteredEmail.includes('@') && enteredPassword.trim().length > 6 
     )
   },[enteredEmail,enteredPassword])
 
@@ -33,6 +34,10 @@ const Login = (props) => {
     // );
   };
 
+  const clgChangeHaldler = (event) => {
+    setEnteredClg(event.target.value);
+  }
+
   const validateEmailHandler = () => {
     setEmailIsValid(enteredEmail.includes('@'));
   };
@@ -43,7 +48,7 @@ const Login = (props) => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    props.onLogin(enteredEmail, enteredPassword);
+    props.onLogin(enteredEmail, enteredPassword, enteredClg); // passing credentials to parent comp App.js
   };
 
   return (
@@ -75,6 +80,21 @@ const Login = (props) => {
             value={enteredPassword}
             onChange={passwordChangeHandler}
             onBlur={validatePasswordHandler}
+          />
+        </div>
+        <div
+          className={`${classes.control} ${
+            emailIsValid === false ? classes.invalid : ''
+          }`}
+        >
+          <label htmlFor="clg">College name</label>
+          <input
+            type="text"
+            id="clg"
+            value={enteredClg}
+            onChange={clgChangeHaldler}
+            required
+          
           />
         </div>
         <div className={classes.actions}>
