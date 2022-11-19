@@ -13,25 +13,28 @@ const Login = (props) => {
   const [formIsValid, setFormIsValid] = useState(false);
 
   useEffect(()=>{
-    setFormIsValid(
-      enteredEmail.includes('@') && enteredPassword.trim().length > 6 
-    )
+    let value = setTimeout(()=>{
+      console.log('validating form input...');
+      setFormIsValid(
+        enteredEmail.includes('@') && enteredPassword.trim().length > 6 
+      )
+    },1000)
+
+    return ()=>{
+      console.log('cleanup function executed');
+      clearTimeout(value);
+    }
+   
   },[enteredEmail,enteredPassword])
 
   const emailChangeHandler = (event) => {
     setEnteredEmail(event.target.value);
 
-    // setFormIsValid(
-    //   event.target.value.includes('@') && enteredPassword.trim().length > 6
-    // );
   };
 
   const passwordChangeHandler = (event) => {
     setEnteredPassword(event.target.value);
 
-    // setFormIsValid(
-    //   event.target.value.trim().length > 6 && enteredEmail.includes('@')
-    // );
   };
 
   const clgChangeHaldler = (event) => {
@@ -83,9 +86,7 @@ const Login = (props) => {
           />
         </div>
         <div
-          className={`${classes.control} ${
-            emailIsValid === false ? classes.invalid : ''
-          }`}
+          className={`${classes.control} `}
         >
           <label htmlFor="clg">College name</label>
           <input
