@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect, useReducer, useContext } from "react";
 
 import Card from "../UI/Card/Card";
 import classes from "./Login.module.css";
 import Button from "../UI/Button/Button";
+import AuthContext from "../context/AuthContext";
 
 function emailReducer(state, action) {
   switch (action.type) {
@@ -22,13 +23,11 @@ function passwordReducer(state, action) {
   }
 }
 
-const Login = (props) => {
-  // const [enteredEmail, setEnteredEmail] = useState('');
-  //  const [emailIsValid, setEmailIsValid] = useState();
-  //  const [enteredPassword, setEnteredPassword] = useState('');
-  //  const [passwordIsValid, setPasswordIsValid] = useState();
+const Login = () => {
   const [enteredClg, setEnteredClg] = useState("");
   const [formIsValid, setFormIsValid] = useState(false);
+
+  let authctx = useContext(AuthContext);
 
   let [emailState, emailDispatcher] = useReducer(emailReducer, {
     value: "",
@@ -54,21 +53,11 @@ const Login = (props) => {
   }, [emailState, passwordState]);
 
   const emailChangeHandler = (event) => {
-    //setEnteredEmail(event.target.value);
-    emailDispatcher({ val: event.target.value, type: "EMAIL_INPUT" }); // this object will be assigned to action parameter of emailReducer function
-
-    // setFormIsValid(
-    //   emailState.value.includes("@") && passwordState.value.trim().length > 6
-    // );
+    emailDispatcher({ val: event.target.value, type: "EMAIL_INPUT" });
   };
 
   const passwordChangeHandler = (event) => {
-    // setEnteredPassword(event.target.value);
     passwordDispatcher({ val: event.target.value, type: "PASSWORD_INPUT" });
-
-    // setFormIsValid(
-    //   emailState.value.includes("@") && passwordState.value.trim().length > 6
-    // );
   };
 
   const clgChangeHaldler = (event) => {
@@ -76,18 +65,16 @@ const Login = (props) => {
   };
 
   const validateEmailHandler = () => {
-    //  setEmailIsValid(emailState.value.includes('@'));
     emailDispatcher({ val: emailState.value, type: "EMAIL_VALID" });
   };
 
   const validatePasswordHandler = () => {
-    // setPasswordIsValid(enteredPassword.trim().length > 6);
     passwordDispatcher({ val: passwordState.value, type: "PASSWORD_VALID" });
   };
 
   const submitHandler = (event) => {
     event.preventDefault();
-    props.onLogin(emailState.value, passwordState.value, enteredClg); // passing credentials to parent comp App.js
+    authctx.onLogin(emailState.value, passwordState.value, enteredClg); // context here
   };
 
   return (
